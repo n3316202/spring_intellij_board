@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="edu.bisang.mapper.BoardMapper">
+
+	<insert id="insert">
+		<![CDATA[
+			  insert into tbl_board (title, content, writer)
+			  values (#{title}, #{content}, #{writer})
+		]]>
+	</insert>
+
+	<select id="getList" resultType="edu.bisang.vo.BoardVO">
+		<![CDATA[
+			select bno, title, content, writer, regdate, viewcnt
+			from tbl_board
+			where bno > 0
+			order by bno desc, regdate desc
+		]]>
+	</select>
+
+	<delete id="delete">
+		<![CDATA[
+			delete from tbl_board where bno = #{bno}
+		]]>
+	</delete>
+
+	<select id="read" resultType="edu.bisang.vo.BoardVO">
+		<![CDATA[
+			select * from tbl_board where bno =	#{bno}
+		]]>
+	</select>
+
+	<update id="update">
+		<![CDATA[
+		update tbl_board
+		set title= #{title},
+		content=#{content},
+		writer = #{writer},
+		updateDate = sysdate()
+		where bno = #{bno}
+				]]>
+	</update>
+
+	<update id="updateReplyCnt">
+		<![CDATA[
+    		update tbl_board set replycnt = replycnt + #{amount} where bno = #{bno}
+    	]]>
+  </update>
+
+	<select id="getListWithPaging" resultType="edu.bisang.vo.BoardVO">
+		<![CDATA[
+			SELECT
+				bno, title, content, writer, regdate, updatedate
+			FROM tbl_board
+			WHERE bno > 0
+			ORDER BY bno DESC, regdate DESC
+			LIMIT #{startPage}  ,  #{amount}
+		]]>
+	</select>
+
+	<select id="getTotalCount" resultType="int">
+		<![CDATA[
+			select count(*) from tbl_board where bno > 0
+		]]>
+	</select>
+
+
+	<select id="listPage" resultType="edu.bisang.vo.BoardVO">
+		<![CDATA[
+				 select bno, title, content, writer, regdate, viewcnt
+				 from tbl_board
+				 where bno>0
+				 order by bno desc, regdate desc
+				 limit #{page} , 10
+		 ]]>
+	</select>
+
+	<select id="listCriteria" resultType="edu.bisang.vo.BoardVO">
+	   <![CDATA[
+				 select bno, title, content, writer, regdate, viewcnt
+				 from tbl_board
+				 where bno > 0
+				 order by bno desc, regdate desc
+				 limit #{pageStart}, #{perPageNum}
+	  ]]>
+	</select>
+
+</mapper>
